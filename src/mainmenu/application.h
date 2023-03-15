@@ -1,6 +1,4 @@
-#pragma once
-
 class Application {
-  public:
-    void run();
-};
+public:
+  void run();
+}

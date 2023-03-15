@@ -1,0 +1,6 @@
+{
+    "configuration": "FlashMode=qio,LoopCore=1,EventsCore=1,USBMode=hwcdc,CDCOnBoot=default,MSCOnBoot=default,DFUOnBoot=default,UploadMode=default,PartitionScheme=fatflash,CPUFreq=240,UploadSpeed=921600,DebugLevel=none,EraseFlash=none",
+    "board": "esp32:esp32:lolin_s3",
+    "programmer": "esptool",
+    "port": "/dev/tty.usbserial-110"
+}

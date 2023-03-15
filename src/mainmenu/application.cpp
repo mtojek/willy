@@ -1,4 +1,3 @@
 #include "application.h"
 
-void Application::run() {
-}
+void Application::run() {}
