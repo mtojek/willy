@@ -1,16 +1,21 @@
 #include <Arduino.h>
 
-#include <mainmenu/application.h>
+#include "mainmenu/application.h"
+
+static const char *TAG = "main";
+
+ApplicationManager appManager;
 
 void setup() {
   Serial.begin(115200);
   while (!Serial)
     ;
 
-  Serial.println("Welcome, willy!");
+  ESP_LOGI(TAG, "Willy is starting...");
 
-  Application mainMenu;
-  mainMenu.run();
+  MainMenu *mainMenu = new MainMenu();
+  appManager.registerApplication(mainMenu);
+  mainMenu->run();
 }
 
 void loop() {
