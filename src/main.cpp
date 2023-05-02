@@ -4,8 +4,6 @@
 
 static const char *TAG = "main";
 
-ApplicationManager appManager;
-
 void setup() {
   Serial.begin(115200);
   while (!Serial)
@@ -13,12 +11,8 @@ void setup() {
 
   ESP_LOGI(TAG, "Willy is starting...");
 
-  MainMenu *mainMenu = new MainMenu();
-  appManager.registerApplication(mainMenu);
-  mainMenu->run();
+  MainMenu mainMenu;
+  mainMenu.open();
 }
 
-void loop() {
-  Serial.println("Hey!");
-  delay(1000);
-}
+void loop() { delay(1000); }

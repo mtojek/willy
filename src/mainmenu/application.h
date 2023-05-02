@@ -1,8 +1,9 @@
-#include "../core/application.h"
+class MainMenu {
+private:
+  TaskHandle_t taskHandle;
 
-class MainMenu : public Application {
+  static void menuHandler(void *params);
+
 public:
-  MainMenu();
-
-  void run();
+  void open();
 };
