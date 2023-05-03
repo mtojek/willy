@@ -1,18 +1,15 @@
-#include <Arduino.h>
-
-#include "mainmenu/application.h"
+#include "apps/homescreen/homescreen.h"
+#include "core/init/device.h"
 
 static const char *TAG = "main";
 
+Device willy;
+HomeScreen homeScreen;
+
 void setup() {
-  Serial.begin(115200);
-  while (!Serial)
-    ;
+  willy.initialize();
 
-  ESP_LOGI(TAG, "Willy is starting...");
-
-  MainMenu mainMenu;
-  mainMenu.open();
+  homeScreen.open();
 }
 
 void loop() { delay(1000); }
