@@ -5,6 +5,10 @@
 
 static const char *TAG = "device_init";
 
+Device::Device()
+    : display(
+          Adafruit_PCD8544(PCD8544_DC_PIN, PCD8544_CS_PIN, PCD8544_RST_PIN)) {}
+
 void Device::initialize() {
   Serial.begin(115200);
   while (!Serial)
@@ -12,6 +16,8 @@ void Device::initialize() {
 
   ESP_LOGI(TAG, "Willy is starting...");
   printHardwareInfo();
+
+  initializeDisplay();
 }
 
 void Device::printHardwareInfo() {
@@ -23,7 +29,7 @@ void Device::printHardwareInfo() {
   esp_chip_info(&chip_info);
 
   ESP_LOGI(TAG, "Flash: %dMB %s", spi_flash_get_chip_size() / (1024 * 1024),
-           (chip_info.features & CHIP_FEATURE_EMB_FLASH) ? "embeded"
+           (chip_info.features & CHIP_FEATURE_EMB_FLASH) ? "embedded"
                                                          : "external");
   ESP_LOGI(TAG, "Flash memory embedded: %s",
            (chip_info.features & CHIP_FEATURE_EMB_FLASH) ? "yes" : "no");
@@ -42,4 +48,16 @@ void Device::printHardwareInfo() {
   uint64_t chipID = ESP.getEfuseMac();
   ESP_LOGI(TAG, "Chip ID: %04X", (uint16_t)(chipID >> 32));
   ESP_LOGI(TAG, "MAC address: %08X", (uint32_t)chipID);
+}
+
+void Device::initializeDisplay() {
+  display.begin();
+  display.setContrast(90);
+
+  display.fillScreen(1);
+  display.display();
+  delay(1000);
+
+  display.clearDisplay();
+  display.display();
 }
