@@ -50,6 +50,8 @@ void Device::printHardwareInfo() {
   uint64_t chipID = ESP.getEfuseMac();
   ESP_LOGI(TAG, "Chip ID: %04X", (uint16_t)(chipID >> 32));
   ESP_LOGI(TAG, "MAC address: %08X", (uint32_t)chipID);
+
+  ESP_LOGI(TAG, "CPU temperature: %.2f C", temperatureRead());
 }
 
 void Device::initializeDisplay() {
