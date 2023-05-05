@@ -7,7 +7,8 @@ static const char *TAG = "device_init";
 
 Device::Device()
     : display(
-          Adafruit_PCD8544(PCD8544_DC_PIN, PCD8544_CS_PIN, PCD8544_RST_PIN)) {}
+          Adafruit_PCD8544(PCD8544_DC_PIN, PCD8544_CS_PIN, PCD8544_RST_PIN)),
+      led(Adafruit_NeoPixel(1, LED_PIN, NEO_GRB + NEO_KHZ800)) {}
 
 void Device::initialize() {
   Serial.begin(115200);
@@ -15,9 +16,14 @@ void Device::initialize() {
     ;
 
   ESP_LOGI(TAG, "Willy is starting...");
+
+  initializeLED();
+  initializeDisplay();
+
   printHardwareInfo();
 
-  initializeDisplay();
+  bootLED();
+  bootDisplay();
 }
 
 void Device::printHardwareInfo() {
@@ -50,10 +56,27 @@ void Device::printHardwareInfo() {
   ESP_LOGI(TAG, "MAC address: %08X", (uint32_t)chipID);
 }
 
+void Device::initializeLED() {
+  led.begin();
+  led.setPixelColor(0, 0, 0, 0);
+  led.setBrightness(1);
+  led.show();
+}
+
 void Device::initializeDisplay() {
   display.begin();
-  display.setContrast(90);
+  display.setContrast(PCD8544_CONTRAST);
+  display.clearDisplay();
+  display.display();
+}
 
+void Device::bootLED() {
+  led.setPixelColor(0, 255, 0, 0); // red pixel
+  led.setBrightness(LED_BRIGHTNESS);
+  led.show();
+}
+
+void Device::bootDisplay() {
   display.fillScreen(1);
   display.display();
   delay(1000);
