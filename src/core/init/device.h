@@ -3,7 +3,7 @@
 #define PCD8544_RST_PIN 14
 #define PCD8544_CONTRAST 90
 
-#define LED_PIN 38
+#define LED_PIN LED_BUILTIN
 #define LED_BRIGHTNESS 10
 
 #include <Adafruit_NeoPixel.h>
@@ -15,10 +15,9 @@ private:
   Adafruit_NeoPixel led;
 
   static void printHardwareInfo();
+
   void initializeDisplay();
-  void initializeLED();
-  void bootDisplay();
-  void bootLED();
+  void boot();
 
 public:
   Device();

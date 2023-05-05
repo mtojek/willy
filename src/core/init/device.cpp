@@ -16,14 +16,10 @@ void Device::initialize() {
     ;
 
   ESP_LOGI(TAG, "Willy is starting...");
-
-  initializeLED();
-  initializeDisplay();
-
   printHardwareInfo();
 
-  bootLED();
-  bootDisplay();
+  initializeDisplay();
+  boot();
 }
 
 void Device::printHardwareInfo() {
@@ -56,13 +52,6 @@ void Device::printHardwareInfo() {
   ESP_LOGI(TAG, "MAC address: %08X", (uint32_t)chipID);
 }
 
-void Device::initializeLED() {
-  led.begin();
-  led.setPixelColor(0, 0, 0, 0);
-  led.setBrightness(1);
-  led.show();
-}
-
 void Device::initializeDisplay() {
   display.begin();
   display.setContrast(PCD8544_CONTRAST);
@@ -70,16 +59,16 @@ void Device::initializeDisplay() {
   display.display();
 }
 
-void Device::bootLED() {
-  led.setPixelColor(0, 255, 0, 0); // red pixel
-  led.setBrightness(LED_BRIGHTNESS);
-  led.show();
-}
-
-void Device::bootDisplay() {
+void Device::boot() {
   display.fillScreen(1);
   display.display();
-  delay(1000);
+
+  led.setPixelColor(0, 255, 0, 0); // red pixel
+  for (int i = 1; i <= LED_BRIGHTNESS; i++) {
+    led.setBrightness(i);
+    led.show();
+    delay(100);
+  }
 
   display.clearDisplay();
   display.display();
