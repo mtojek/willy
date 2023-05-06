@@ -56,6 +56,7 @@ void Device::printHardwareInfo() {
 
 void Device::initializeDisplay() {
   display.begin();
+  display.setRotation(2);
   display.setContrast(PCD8544_CONTRAST);
   display.setBias(PCD8544_BIAS);
   display.clearDisplay();
