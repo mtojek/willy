@@ -2,6 +2,8 @@
 
 static const char *TAG = "home_screen";
 
+HomeScreen::HomeScreen(Device &device) : device(device) {}
+
 void HomeScreen::open() {
   xTaskCreate(taskHandler, TAG, 4096, NULL, 10, &taskHandle);
 }

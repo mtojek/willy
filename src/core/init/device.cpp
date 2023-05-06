@@ -76,3 +76,5 @@ void Device::boot() {
   display.clearDisplay();
   display.display();
 }
+
+Adafruit_PCD8544 *Device::getDisplay() { return &display; }

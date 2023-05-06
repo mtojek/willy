@@ -23,4 +23,6 @@ private:
 public:
   Device();
   void initialize();
+
+  Adafruit_PCD8544 *getDisplay();
 };

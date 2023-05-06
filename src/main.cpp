@@ -1,10 +1,9 @@
 #include "apps/homescreen/homescreen.h"
-#include "core/init/device.h"
 
 static const char *TAG = "main";
 
 Device willy;
-HomeScreen homeScreen;
+HomeScreen homeScreen(willy);
 
 void setup() {
   willy.initialize();
