@@ -1,14 +1,25 @@
-#include "apps/homescreen/homescreen.h"
+#include "core/application/manager.h"
 
-static const char *TAG = "main";
+#include "apps/homescreen/homescreen.h"
+#include "apps/mainmenu/mainmenu.h"
 
 Device willy;
 HomeScreen homeScreen(willy);
+MainMenu mainMenu;
+
+ApplicationManager appManager;
 
 void setup() {
   willy.initialize();
 
-  homeScreen.open();
+  appManager.install(&homeScreen);
+  appManager.install(&mainMenu);
+
+  appManager.start(homeScreen.getName());
 }
 
-void loop() { delay(1000); }
+void loop() {
+  // processInput();
+  appManager.onUpdate();
+  appManager.onRender();
+}

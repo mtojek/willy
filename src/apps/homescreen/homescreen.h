@@ -1,16 +1,18 @@
 #include <Arduino.h>
 
+#include "../core/application/application.h"
 #include "../core/init/device.h"
 
-class HomeScreen {
+class HomeScreen : public Application {
 private:
   Device &device;
-  TaskHandle_t taskHandle;
 
-  static void taskHandler(void *params);
+  bool opened;
+  bool rendered;
 
 public:
   HomeScreen(Device &device);
 
-  void open();
+  void onUpdate();
+  void onRender();
 };

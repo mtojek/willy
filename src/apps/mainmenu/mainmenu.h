@@ -1,11 +1,11 @@
 #include <Arduino.h>
 
-class MainMenu {
-private:
-  TaskHandle_t taskHandle;
+#include "../core/application/application.h"
 
-  static void taskHandler(void *params);
-
+class MainMenu : public Application {
 public:
-  void open();
+  MainMenu();
+
+  void onUpdate();
+  void onRender();
 };

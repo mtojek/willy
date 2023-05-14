@@ -1,24 +1,29 @@
 #include "homescreen.h"
 
-static const char *TAG = "home_screen";
+HomeScreen::HomeScreen(Device &device)
+    : Application("home_screen"), device(device) {}
 
-HomeScreen::HomeScreen(Device &device) : device(device) {}
+void HomeScreen::onUpdate() {
+  if (opened) {
+    return;
+  }
 
-void HomeScreen::open() {
-  xTaskCreate(taskHandler, TAG, 4096, this, 10, &taskHandle);
+  ESP_LOGI(name, "Open home screen");
+
+  opened = true;
 }
 
-void HomeScreen::taskHandler(void *params) {
-  ESP_LOGI(TAG, "Open home screen");
+void HomeScreen::onRender() {
+  if (rendered) {
+    return;
+  }
 
-  HomeScreen *that = (HomeScreen *)params;
-  Adafruit_PCD8544 *display = that->device.getDisplay();
+  Adafruit_PCD8544 *display = device.getDisplay();
 
   // draw screen
   display->setCursor(30, 40);
   display->print("Menu");
   display->display();
 
-  // check go button
-  vTaskDelete(NULL);
+  rendered = true;
 }
