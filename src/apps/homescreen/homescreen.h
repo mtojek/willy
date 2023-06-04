@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
 #include "../core/application/application.h"
-#include "../core/init/device.h"
+#include "../core/hardware/device.h"
 
 class HomeScreen : public Application {
 private:

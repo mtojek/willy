@@ -19,7 +19,8 @@ void setup() {
 }
 
 void loop() {
-  // processInput();
+  willy.sync();
+
   appManager.onUpdate();
   appManager.onRender();
 }

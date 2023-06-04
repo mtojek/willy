@@ -8,7 +8,8 @@ static const char *TAG = "device_init";
 Device::Device()
     : display(
           Adafruit_PCD8544(PCD8544_DC_PIN, PCD8544_CS_PIN, PCD8544_RST_PIN)),
-      led(Adafruit_NeoPixel(1, LED_PIN, NEO_GRB + NEO_KHZ800)) {}
+      led(Adafruit_NeoPixel(1, LED_PIN, NEO_GRB + NEO_KHZ800)),
+      joystick(Joystick(JOYSTICK_VRX_PIN, JOYSTICK_VRY_PIN, JOYSTICK_SW_PIN)) {}
 
 void Device::initialize() {
   Serial.begin(115200);
@@ -78,4 +79,8 @@ void Device::boot() {
   display.display();
 }
 
+void Device::sync() { joystick.sync(); }
+
 Adafruit_PCD8544 *Device::getDisplay() { return &display; }
+
+Joystick *Device::getJoystick() { return &joystick; }
