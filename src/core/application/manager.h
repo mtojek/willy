@@ -1,3 +1,5 @@
+#pragma once
+
 #include <Array.h>
 
 #include "application.h"

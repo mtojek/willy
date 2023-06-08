@@ -1,3 +1,5 @@
+#pragma once
+
 #include <ezButton.h>
 
 #include "joystick_state.h"

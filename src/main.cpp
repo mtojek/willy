@@ -4,10 +4,10 @@
 #include "apps/mainmenu/mainmenu.h"
 
 Device willy;
-HomeScreen homeScreen(willy);
-MainMenu mainMenu;
-
 ApplicationManager appManager;
+
+HomeScreen homeScreen(willy);
+MainMenu mainMenu(willy);
 
 void setup() {
   willy.initialize();

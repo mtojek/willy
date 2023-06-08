@@ -1,3 +1,5 @@
+#pragma once
+
 #define PCD8544_DC_PIN 21
 #define PCD8544_CS_PIN 9
 #define PCD8544_RST_PIN 14

@@ -1,6 +1,6 @@
 #include "mainmenu.h"
 
-MainMenu::MainMenu() : Application("main_menu") {}
+MainMenu::MainMenu(Device &device) : Application("main_menu"), device(device) {}
 
 void MainMenu::onUpdate() {}
 

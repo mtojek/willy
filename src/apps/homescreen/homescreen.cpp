@@ -6,17 +6,7 @@ HomeScreen::HomeScreen(Device &device)
 void HomeScreen::onUpdate() {
   Joystick *joystick = device.getJoystick();
   JoystickState *joystickState = joystick->getState();
-
-  int vrx = joystickState->getVRx();
-  int vry = joystickState->getVRy();
   bool sw = joystickState->getSW();
-
-  if (vrx < 1000 || vrx > 3000) {
-    ESP_LOGI(name, "Joystick: vx = %d", vrx);
-  }
-  if (vry < 1000 || vry > 3000) {
-    ESP_LOGI(name, "Joystick: vy = %d", vry);
-  }
 
   if (sw) {
     ESP_LOGI(name, "Joystick: clicked", sw);

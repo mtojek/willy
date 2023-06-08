@@ -1,3 +1,5 @@
+#pragma once
+
 class JoystickState {
 private:
   int vrx, vry;
