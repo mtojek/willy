@@ -1,6 +1,9 @@
 #include "manager.h"
 
-void ApplicationManager::install(Application *app) { installed.push_back(app); }
+void ApplicationManager::install(Application *app) {
+  app->onInstall(this);
+  installed.push_back(app);
+}
 
 void ApplicationManager::start(const char *name) {
   for (Application *app : installed) {
