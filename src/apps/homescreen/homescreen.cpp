@@ -4,21 +4,18 @@ HomeScreen::HomeScreen(Device &device)
     : Application("home_screen"), device(device) {}
 
 void HomeScreen::onUpdate() {
+  if (!appManager->isDisplayed(getName())) {
+    return;
+  }
+
   Joystick *joystick = device.getJoystick();
   JoystickState *joystickState = joystick->getState();
   bool sw = joystickState->getSW();
 
   if (sw) {
     ESP_LOGI(name, "Joystick: clicked", sw);
+    appManager->start("main_menu");
   }
-
-  if (opened) {
-    return;
-  }
-
-  ESP_LOGI(name, "Open home screen");
-
-  opened = true;
 }
 
 void HomeScreen::onRender() {

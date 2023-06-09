@@ -9,7 +9,6 @@ class HomeScreen : public Application {
 private:
   Device &device;
 
-  bool opened;
   bool rendered;
 
 public:

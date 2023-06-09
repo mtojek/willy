@@ -18,6 +18,7 @@ public:
   void install(Application *app);
   void start(const char *name);
   void stop(const char *name);
+  boolean isDisplayed(const char *name);
 
   void onUpdate();
   void onRender();
