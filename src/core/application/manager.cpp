@@ -1,16 +1,33 @@
 #include "manager.h"
 
 void ApplicationManager::install(Application *app) {
-  app->onInstall(this);
   installed.push_back(app);
+  app->onInstall(this);
 }
 
 void ApplicationManager::start(const char *name) {
   ESP_LOGI(name, "Start application: %s", name);
 
+  // If the application has been already started,
+  // then let's move it to the last position (= displayed);
+  for (int i = 0; i < running.size(); i++) {
+    if (strcmp(running[i]->getName(), name) != 0) {
+      continue;
+    }
+
+    if (i == running.size()) {
+      return; // application is trying to start itself
+    }
+
+    running.push_back(running[i]);
+    running.remove(i);
+    return;
+  }
+
   for (Application *app : installed) {
     if (strcmp(app->getName(), name) == 0) {
       running.push_back(app);
+      app->onStart();
       return;
     }
   }

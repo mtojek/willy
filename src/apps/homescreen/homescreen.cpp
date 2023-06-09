@@ -3,6 +3,15 @@
 HomeScreen::HomeScreen(Device &device)
     : Application("home_screen"), device(device) {}
 
+void HomeScreen::onStart() {
+  Adafruit_PCD8544 *display = device.getDisplay();
+
+  display->clearDisplay();
+  display->display();
+
+  rendered = false;
+}
+
 void HomeScreen::onUpdate() {
   if (!appManager->isDisplayed(getName())) {
     return;
@@ -13,7 +22,6 @@ void HomeScreen::onUpdate() {
   bool sw = joystickState->getSW();
 
   if (sw) {
-    ESP_LOGI(name, "Joystick: clicked", sw);
     appManager->start("main_menu");
   }
 }

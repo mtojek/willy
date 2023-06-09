@@ -14,6 +14,7 @@ private:
 public:
   HomeScreen(Device &device);
 
+  void onStart();
   void onUpdate();
   void onRender();
 };

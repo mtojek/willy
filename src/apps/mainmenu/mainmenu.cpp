@@ -2,8 +2,15 @@
 
 MainMenu::MainMenu(Device &device) : Application("main_menu"), device(device) {}
 
+void MainMenu::onStart() {
+  Adafruit_PCD8544 *display = device.getDisplay();
+
+  display->clearDisplay();
+  display->display();
+}
+
 void MainMenu::onUpdate() {
-  if (appManager->isDisplayed(getName())) {
+  if (!appManager->isDisplayed(getName())) {
     return;
   }
 }

@@ -12,6 +12,7 @@ private:
 public:
   MainMenu(Device &device);
 
+  void onStart();
   void onUpdate();
   void onRender();
 };
