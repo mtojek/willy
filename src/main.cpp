@@ -12,8 +12,8 @@ MainMenu mainMenu(willy);
 void setup() {
   willy.initialize();
 
-  appManager.install(&homeScreen);
-  appManager.install(&mainMenu);
+  appManager.install(homeScreen);
+  appManager.install(mainMenu);
 
   appManager.start(homeScreen.getName());
 }

@@ -14,5 +14,4 @@ public:
 
   void onStart();
   void onUpdate();
-  void onRender();
 };

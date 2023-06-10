@@ -14,9 +14,9 @@ protected:
 public:
   void onInstall(ApplicationManager *am);
 
-  virtual void onStart() = 0;
+  virtual void onStart();
   virtual void onUpdate() = 0;
-  virtual void onRender() = 0;
+  virtual void onRender();
 
   const char *getName();
 };
