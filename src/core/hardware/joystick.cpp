@@ -1,5 +1,3 @@
-#pragma once
-
 #include "core/hardware/joystick.h"
 
 Joystick::Joystick(int vrxPin, int vryPin, int swPin)
