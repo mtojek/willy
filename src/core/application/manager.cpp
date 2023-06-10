@@ -8,7 +8,7 @@ void ApplicationManager::install(Application &app) {
 }
 
 void ApplicationManager::start(const char *appName) {
-  ESP_LOGI(name, "Start application: %s", appName);
+  ESP_LOGD(name, "Start application: %s", appName);
 
   // If the application has been already started,
   // then let's move it to the last position (= displayed);
@@ -37,7 +37,7 @@ void ApplicationManager::start(const char *appName) {
 }
 
 void ApplicationManager::stop(const char *appName) {
-  ESP_LOGI(name, "Stop application: %s", appName);
+  ESP_LOGD(name, "Stop application: %s", appName);
 
   for (int i = 0; i < running.size(); i++) {
     if (strcmp(running[i]->getName(), appName) == 0) {

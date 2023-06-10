@@ -3,7 +3,7 @@
 MainMenu::MainMenu(Device &device) : Application("main_menu"), device(device) {}
 
 void MainMenu::onStart() {
-  ESP_LOGI(name, "MainMenu::onStart");
+  ESP_LOGD(name, "MainMenu::onStart");
 
   Adafruit_PCD8544 *display = device.getDisplay();
 

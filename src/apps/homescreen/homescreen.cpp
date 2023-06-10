@@ -4,7 +4,7 @@ HomeScreen::HomeScreen(Device &device)
     : Application("home_screen"), device(device) {}
 
 void HomeScreen::onStart() {
-  ESP_LOGI(name, "HomeScreen::onStart");
+  ESP_LOGD(name, "HomeScreen::onStart");
 
   Adafruit_PCD8544 *display = device.getDisplay();
   display->clearDisplay();
@@ -31,7 +31,7 @@ void HomeScreen::onRender() {
     return;
   }
 
-  ESP_LOGI(name, "HomeScreen::onRender (once)");
+  ESP_LOGD(name, "HomeScreen::onRender (once)");
 
   Adafruit_PCD8544 *display = device.getDisplay();
   display->setCursor(30, 40);
