@@ -1,4 +1,6 @@
-#include "joystick.h"
+#pragma once
+
+#include "core/hardware/joystick.h"
 
 Joystick::Joystick(int vrxPin, int vryPin, int swPin)
     : vrxPin(vrxPin), vryPin(vryPin), sw(ezButton(swPin)),

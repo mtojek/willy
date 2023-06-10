@@ -1,4 +1,4 @@
-#include "joystick_state.h"
+#include "core/hardware/joystick_state.h"
 
 JoystickState::JoystickState(int vrx, int vry, bool sw)
     : vrx(vrx), vry(vry), sw(sw) {}

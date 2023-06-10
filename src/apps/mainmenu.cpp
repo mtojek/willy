@@ -1,4 +1,4 @@
-#include "mainmenu.h"
+#include "apps/mainmenu.h"
 
 MainMenu::MainMenu(Device &device) : Application("main_menu"), device(device) {}
 

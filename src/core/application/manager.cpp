@@ -1,6 +1,6 @@
 #include "manager.h"
 
-ApplicationManager::ApplicationManager() : name("application_manager") {}
+#define TAG "application_manager"
 
 void ApplicationManager::install(Application &app) {
   installed.push_back(&app);
@@ -8,7 +8,7 @@ void ApplicationManager::install(Application &app) {
 }
 
 void ApplicationManager::start(const char *appName) {
-  ESP_LOGD(name, "Start application: %s", appName);
+  ESP_LOGD(TAG, "Start application: %s", appName);
 
   // If the application has been already started,
   // then let's move it to the last position (= displayed);
@@ -37,7 +37,7 @@ void ApplicationManager::start(const char *appName) {
 }
 
 void ApplicationManager::stop(const char *appName) {
-  ESP_LOGD(name, "Stop application: %s", appName);
+  ESP_LOGD(TAG, "Stop application: %s", appName);
 
   for (int i = 0; i < running.size(); i++) {
     if (strcmp(running[i]->getName(), appName) == 0) {

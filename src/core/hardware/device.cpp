@@ -1,9 +1,6 @@
-#include "esp32-hal-log.h"
-#include <Arduino.h>
+#include "core/hardware/device.h"
 
-#include "device.h"
-
-static const char *TAG = "device_init";
+#define TAG "device"
 
 Device::Device()
     : display(

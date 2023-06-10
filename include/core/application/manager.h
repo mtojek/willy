@@ -11,12 +11,10 @@ typedef Array<Application *, RUNNING_APPS_COUNT_MAX> Apps;
 
 class ApplicationManager {
 private:
-  const char *name;
   Apps installed;
   Apps running;
 
 public:
-  ApplicationManager();
   void install(Application &app);
   void start(const char *name);
   void stop(const char *name);

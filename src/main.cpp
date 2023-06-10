@@ -1,7 +1,7 @@
 #include "core/application/manager.h"
 
-#include "apps/homescreen/homescreen.h"
-#include "apps/mainmenu/mainmenu.h"
+#include "apps/homescreen.h"
+#include "apps/mainmenu.h"
 
 Device willy;
 ApplicationManager appManager;

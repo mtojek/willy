@@ -1,4 +1,4 @@
-#include "homescreen.h"
+#include "apps/homescreen.h"
 
 HomeScreen::HomeScreen(Device &device)
     : Application("home_screen"), device(device) {}
