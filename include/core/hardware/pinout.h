@@ -12,3 +12,7 @@
 #define JOYSTICK_VRX_PIN 1
 #define JOYSTICK_VRY_PIN 2
 #define JOYSTICK_SW_PIN 40
+
+#define RADIO_CE_PIN 46
+#define RADIO_CSN_PIN 3
+#define RADIO_IRQ_PIN 8

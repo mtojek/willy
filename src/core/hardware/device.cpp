@@ -6,7 +6,8 @@ Device::Device()
     : display(
           Adafruit_PCD8544(PCD8544_DC_PIN, PCD8544_CS_PIN, PCD8544_RST_PIN)),
       led(Adafruit_NeoPixel(1, LED_PIN, NEO_GRB + NEO_KHZ800)),
-      joystick(Joystick(JOYSTICK_VRX_PIN, JOYSTICK_VRY_PIN, JOYSTICK_SW_PIN)) {}
+      joystick(Joystick(JOYSTICK_VRX_PIN, JOYSTICK_VRY_PIN, JOYSTICK_SW_PIN)),
+      radio(RF24(RADIO_CE_PIN, RADIO_CSN_PIN)) {}
 
 void Device::initialize() {
   Serial.begin(115200);
@@ -17,6 +18,7 @@ void Device::initialize() {
   printHardwareInfo();
 
   initializeDisplay();
+  initializeRadio();
   boot();
 }
 
@@ -59,6 +61,40 @@ void Device::initializeDisplay() {
   display.setBias(PCD8544_BIAS);
   display.clearDisplay();
   display.display();
+}
+
+void Device::initializeRadio() {
+  if (!radio.begin()) {
+    ESP_LOGE(TAG, "Radio hardware is not responding.");
+    return;
+  }
+
+  uint8_t rxAddr[5] = "ardu";
+
+  radio.setPALevel(RF24_PA_HIGH);
+  radio.openWritingPipe(rxAddr);
+  radio.setChannel(5);
+  radio.setAutoAck(true);
+  radio.enableAckPayload();
+  radio.enableDynamicPayloads();
+  radio.setRetries(15, 15);
+  radio.printDetails();
+
+  const byte buffer[] = "bazant";
+  bool ok = radio.write(buffer, 6);
+  if (ok) {
+    ESP_LOGI(TAG, "Message sent OK.");
+  } else if (radio.failureDetected) {
+    ESP_LOGE(TAG, "Radio: failure detected");
+  } else {
+    ESP_LOGE(TAG, "Message not sent, failed.");
+  }
+
+  int rec[1] = {5};
+  if (radio.isAckPayloadAvailable()) {
+    radio.read(rec, sizeof(rec));
+    ESP_LOGI(TAG, "received ack payload is: %d", rec[0]);
+  }
 }
 
 void Device::boot() {

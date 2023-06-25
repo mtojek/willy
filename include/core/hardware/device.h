@@ -11,16 +11,19 @@
 
 #include <Adafruit_NeoPixel.h>
 #include <Adafruit_PCD8544.h>
+#include <RF24.h>
 
 class Device {
 private:
   Adafruit_PCD8544 display;
   Adafruit_NeoPixel led;
   Joystick joystick;
+  RF24 radio;
 
   static void printHardwareInfo();
 
   void initializeDisplay();
+  void initializeRadio();
   void boot();
 
 public:
