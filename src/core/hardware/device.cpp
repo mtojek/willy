@@ -72,28 +72,50 @@ void Device::initializeRadio() {
   uint8_t rxAddr[5] = "ardu";
 
   radio.setPALevel(RF24_PA_HIGH);
-  radio.openWritingPipe(rxAddr);
   radio.setChannel(5);
   radio.setAutoAck(true);
   radio.enableAckPayload();
   radio.enableDynamicPayloads();
+  radio.openReadingPipe(0, rxAddr);
+  radio.startListening();
   radio.setRetries(15, 15);
   radio.printDetails();
 
-  const byte buffer[] = "bazant";
-  bool ok = radio.write(buffer, 6);
-  if (ok) {
-    ESP_LOGI(TAG, "Message sent OK.");
-  } else if (radio.failureDetected) {
-    ESP_LOGE(TAG, "Radio: failure detected");
-  } else {
-    ESP_LOGE(TAG, "Message not sent, failed.");
-  }
+  byte payload[128];
+  memset(payload, 0, sizeof(payload));
 
-  int rec[1] = {5};
-  if (radio.isAckPayloadAvailable()) {
-    radio.read(rec, sizeof(rec));
-    ESP_LOGI(TAG, "received ack payload is: %d", rec[0]);
+  uint8_t pipe;
+
+  while (true) {
+    if (radio.available(&pipe)) {
+      ESP_LOGI(TAG, "got it");
+      uint8_t bytes = radio.getPayloadSize(); // get the size of the payload
+
+      radio.read(&payload, bytes);
+
+      // fetch payload from FIFO
+      ESP_LOGI(TAG, "Received %d bytes on pipe %d", bytes, pipe);
+
+      int arrayLength = sizeof(payload) - 1;
+      for (int i = 0; i < arrayLength; i++) {
+        if (payload[i] == 0) {
+          break;
+        }
+
+        Serial.write(payload[i]);
+      }
+      Serial.println();
+
+      display.clearDisplay();
+      display.setCursor(2, 0);
+      display.print((char *)(payload));
+      display.display();
+
+      radio.writeAckPayload(1, payload, 6);
+      ESP_LOGI(TAG, "ACK");
+    }
+
+    delay(50);
   }
 }
 
