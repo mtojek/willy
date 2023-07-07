@@ -18,7 +18,7 @@ void Device::initialize() {
   printHardwareInfo();
 
   initializeDisplay();
-  initializeRadio();
+  // initializeRadio();
   boot();
 }
 
