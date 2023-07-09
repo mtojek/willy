@@ -20,9 +20,6 @@ private:
   Radio radio;
 
   static void printHardwareInfo();
-
-  void initializeDisplay();
-  void initializeRadio();
   void boot();
 
 public:
