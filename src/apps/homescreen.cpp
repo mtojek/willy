@@ -6,8 +6,9 @@ HomeScreen::HomeScreen(Device &device)
 void HomeScreen::onStart() {
   ESP_LOGD(name, "HomeScreen::onStart");
 
-  Adafruit_PCD8544 *display = device.getDisplay();
-  display->clearDisplay();
+  Display *display = device.getDisplay();
+  Adafruit_PCD8544 *d = display->getPCD();
+  d->clearDisplay();
 
   rendered = false;
 }
@@ -33,10 +34,11 @@ void HomeScreen::onRender() {
 
   ESP_LOGD(name, "HomeScreen::onRender (once)");
 
-  Adafruit_PCD8544 *display = device.getDisplay();
-  display->setCursor(30, 40);
-  display->print("Menu");
-  display->display();
+  Display *display = device.getDisplay();
+  Adafruit_PCD8544 *d = display->getPCD();
+  d->setCursor(30, 40);
+  d->print("Menu");
+  d->display();
 
   rendered = true;
 }

@@ -2,7 +2,7 @@
 
 const char *RADIO_TAG = "radio";
 
-Radio::Radio(int cePin, int csnPin) { rf = RF24(cePin, csnPin); }
+Radio::Radio(int cePin, int csnPin) : rf(RF24(cePin, csnPin)) {}
 
 bool Radio::initialize() {
   if (!rf.begin()) {

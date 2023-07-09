@@ -5,10 +5,11 @@ MainMenu::MainMenu(Device &device) : Application("main_menu"), device(device) {}
 void MainMenu::onStart() {
   ESP_LOGD(name, "MainMenu::onStart");
 
-  Adafruit_PCD8544 *display = device.getDisplay();
+  Display *display = device.getDisplay();
+  Adafruit_PCD8544 *d = display->getPCD();
 
-  display->clearDisplay();
-  display->display();
+  d->clearDisplay();
+  d->display();
 }
 
 void MainMenu::onUpdate() {

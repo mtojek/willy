@@ -3,8 +3,8 @@
 #define TAG "device"
 
 Device::Device()
-    : display(
-          Adafruit_PCD8544(PCD8544_DC_PIN, PCD8544_CS_PIN, PCD8544_RST_PIN)),
+    : display(Display(PCD8544_DC_PIN, PCD8544_CS_PIN, PCD8544_RST_PIN,
+                      PCD8544_CONTRAST, PCD8544_BIAS)),
       led(Adafruit_NeoPixel(1, LED_PIN, NEO_GRB + NEO_KHZ800)),
       joystick(Joystick(JOYSTICK_VRX_PIN, JOYSTICK_VRY_PIN, JOYSTICK_SW_PIN)),
       radio(Radio(RADIO_CE_PIN, RADIO_CSN_PIN)) {}
@@ -17,8 +17,7 @@ void Device::initialize() {
   ESP_LOGI(TAG, "Willy is starting...");
   printHardwareInfo();
 
-  initializeDisplay();
-
+  display.initialize();
   if (!radio.initialize()) {
     ESP_LOGE(TAG, "Radio initialization failed");
     return;
@@ -59,18 +58,10 @@ void Device::printHardwareInfo() {
   ESP_LOGI(TAG, "CPU temperature: %.2f C", temperatureRead());
 }
 
-void Device::initializeDisplay() {
-  display.begin();
-  display.setRotation(2);
-  display.setContrast(PCD8544_CONTRAST);
-  display.setBias(PCD8544_BIAS);
-  display.clearDisplay();
-  display.display();
-}
-
 void Device::boot() {
-  display.fillScreen(1);
-  display.display();
+  Adafruit_PCD8544 *d = display.getPCD();
+  d->fillScreen(1);
+  d->display();
 
   led.setPixelColor(0, 255, 0, 0); // red pixel
   for (int i = 1; i <= LED_BRIGHTNESS; i++) {
@@ -79,13 +70,13 @@ void Device::boot() {
     delay(100);
   }
 
-  display.clearDisplay();
-  display.display();
+  d->clearDisplay();
+  d->display();
 }
 
 void Device::sync() { joystick.sync(); }
 
-Adafruit_PCD8544 *Device::getDisplay() { return &display; }
+Display *Device::getDisplay() { return &display; }
 
 Joystick *Device::getJoystick() { return &joystick; }
 
