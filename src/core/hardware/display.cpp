@@ -13,4 +13,4 @@ void Display::initialize() {
   display.display();
 }
 
-Adafruit_PCD8544 *Display::getPCD() { return &display; }
+Adafruit_PCD8544 *Display::getDriver() { return &display; }

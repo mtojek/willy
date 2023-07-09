@@ -15,4 +15,4 @@ bool Radio::initialize() {
   return true;
 }
 
-RF24 *Radio ::getRF24() { return &rf; }
+RF24 *Radio ::getDriver() { return &rf; }

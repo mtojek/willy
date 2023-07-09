@@ -12,5 +12,5 @@ public:
   Radio(int cePin, int csnPin);
 
   bool initialize();
-  RF24 *getRF24();
+  RF24 *getDriver();
 };

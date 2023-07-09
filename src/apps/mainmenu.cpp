@@ -6,7 +6,7 @@ void MainMenu::onStart() {
   ESP_LOGD(name, "MainMenu::onStart");
 
   Display *display = device.getDisplay();
-  Adafruit_PCD8544 *d = display->getPCD();
+  Adafruit_PCD8544 *d = display->getDriver();
 
   d->clearDisplay();
   d->display();

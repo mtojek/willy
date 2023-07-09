@@ -65,7 +65,7 @@ void Device::printHardwareInfo() {
 }
 
 void Device::boot() {
-  Adafruit_PCD8544 *d = display.getPCD();
+  Adafruit_PCD8544 *d = display.getDriver();
   d->fillScreen(1);
   d->display();
 

@@ -2,10 +2,10 @@
 
 const char *CC1101_TAG = "cc1101";
 
-CC1101::CC1101(int sckPin, int mosiPin, int csnPin, int gdo0Pin, int gdo1Pin,
-               int gdo2Pin)
-    : sckPin(sckPin), mosiPin(mosiPin), csnPin(csnPin), gdo0Pin(gdo0Pin),
-      gdo1Pin(gdo1Pin), gdo2Pin(gdo2Pin), elechouse(ELECHOUSE_CC1101()) {}
+CC1101::CC1101(int csnPin, int gdo0Pin, int gdo2Pin, int gdo1Pin, int sckPin,
+               int mosiPin)
+    : csnPin(csnPin), gdo0Pin(gdo0Pin), gdo2Pin(gdo2Pin),
+      elechouse(ELECHOUSE_CC1101()) {}
 
 bool CC1101::initialize() {
   elechouse.setSpiPin(sckPin, gdo1Pin, mosiPin, csnPin);
@@ -18,4 +18,4 @@ bool CC1101::initialize() {
   }
 }
 
-ELECHOUSE_CC1101 *CC1101::getElechouse() { return &elechouse; }
+ELECHOUSE_CC1101 *CC1101::getDriver() { return &elechouse; }

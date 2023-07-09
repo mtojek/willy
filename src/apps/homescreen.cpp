@@ -7,7 +7,7 @@ void HomeScreen::onStart() {
   ESP_LOGD(name, "HomeScreen::onStart");
 
   Display *display = device.getDisplay();
-  Adafruit_PCD8544 *d = display->getPCD();
+  Adafruit_PCD8544 *d = display->getDriver();
   d->clearDisplay();
 
   rendered = false;
@@ -35,7 +35,7 @@ void HomeScreen::onRender() {
   ESP_LOGD(name, "HomeScreen::onRender (once)");
 
   Display *display = device.getDisplay();
-  Adafruit_PCD8544 *d = display->getPCD();
+  Adafruit_PCD8544 *d = display->getDriver();
   d->setCursor(30, 40);
   d->print("Menu");
   d->display();
