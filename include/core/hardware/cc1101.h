@@ -20,6 +20,6 @@ public:
   CC1101(int sckPin, int mosiPin, int csnPin, int gdo0Pin, int gdo1Pin,
          int gdo2Pin);
 
-  void initialize();
+  bool initialize();
   ELECHOUSE_CC1101 *getElechouse();
 };

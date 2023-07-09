@@ -24,7 +24,10 @@ void Device::initialize() {
     ESP_LOGE(TAG, "Radio initialization failed");
     return;
   }*/
-  cc1101.initialize();
+  if (!cc1101.initialize()) {
+    ESP_LOGE(TAG, "CC1101 initialization failed");
+    return;
+  }
 
   boot();
 }
