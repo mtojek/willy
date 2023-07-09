@@ -7,7 +7,9 @@ Device::Device()
                       PCD8544_CONTRAST, PCD8544_BIAS)),
       led(Adafruit_NeoPixel(1, LED_PIN, NEO_GRB + NEO_KHZ800)),
       joystick(Joystick(JOYSTICK_VRX_PIN, JOYSTICK_VRY_PIN, JOYSTICK_SW_PIN)),
-      radio(Radio(RADIO_CE_PIN, RADIO_CSN_PIN)) {}
+      radio(Radio(RADIO_CE_PIN, RADIO_CSN_PIN)),
+      cc1101(CC1101(SPI_SCK_PIN, SPI_MOSI_PIN, CC1101_CSN_PIN, CC1101_GDO0_PIN,
+                    CC1101_GDO1_PIN, CC1101_GDO2_PIN)) {}
 
 void Device::initialize() {
   Serial.begin(115200);
@@ -18,10 +20,11 @@ void Device::initialize() {
   printHardwareInfo();
 
   display.initialize();
-  if (!radio.initialize()) {
+  /*if (!radio.initialize()) {
     ESP_LOGE(TAG, "Radio initialization failed");
     return;
-  }
+  }*/
+  cc1101.initialize();
 
   boot();
 }
@@ -81,3 +84,5 @@ Display *Device::getDisplay() { return &display; }
 Joystick *Device::getJoystick() { return &joystick; }
 
 Radio *Device::getRadio() { return &radio; }
+
+CC1101 *Device::getCC1101() { return &cc1101; }

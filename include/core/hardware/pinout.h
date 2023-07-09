@@ -2,10 +2,10 @@
 
 // LOLIN S3
 //
-// MISO_PIN: 13
-// MOSI_PIN: 11
-// SCK_PIN: 12
-// SS_PIN: 10
+#define SPI_SS_PIN 10
+#define SPI_MOSI_PIN 11
+#define SPI_SCK_PIN 12
+#define SPI_MISO_PIN 13
 
 #define PCD8544_DC_PIN 21
 #define PCD8544_CS_PIN 9
@@ -26,5 +26,5 @@
 
 #define CC1101_CSN_PIN 15
 #define CC1101_GDO0_PIN 16
-#define CC1101_GDO1_PIN 17
-#define CC1101_GDO2_PIN 18
+#define CC1101_GDO1_PIN SPI_MISO_PIN // MISO
+#define CC1101_GDO2_PIN 17           // IRQ

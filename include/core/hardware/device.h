@@ -5,6 +5,7 @@
 
 #include "pinout.h"
 
+#include "cc1101.h"
 #include "display.h"
 #include "joystick.h"
 #include "radio.h"
@@ -18,6 +19,7 @@ private:
   Adafruit_NeoPixel led;
   Joystick joystick;
   Radio radio;
+  CC1101 cc1101;
 
   static void printHardwareInfo();
   void boot();
@@ -30,4 +32,5 @@ public:
   Display *getDisplay();
   Joystick *getJoystick();
   Radio *getRadio();
+  CC1101 *getCC1101();
 };

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "esp32-hal-log.h"
-
 #include <Adafruit_PCD8544.h>
 
 class Display {
