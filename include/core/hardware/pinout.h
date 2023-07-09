@@ -1,5 +1,12 @@
 #pragma once
 
+// LOLIN S3
+//
+// MISO_PIN: 13
+// MOSI_PIN: 11
+// SCK_PIN: 12
+// SS_PIN: 10
+
 #define PCD8544_DC_PIN 21
 #define PCD8544_CS_PIN 9
 #define PCD8544_RST_PIN 14
@@ -16,3 +23,8 @@
 #define RADIO_CE_PIN 46
 #define RADIO_CSN_PIN 3
 #define RADIO_IRQ_PIN 8
+
+#define CC1101_CSN_PIN 15
+#define CC1101_GDO0_PIN 16
+#define CC1101_GDO1_PIN 17
+#define CC1101_GDO2_PIN 18

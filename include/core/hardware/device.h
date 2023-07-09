@@ -6,19 +6,17 @@
 #include "pinout.h"
 
 #include "joystick.h"
-
-#include "device.h"
+#include "radio.h"
 
 #include <Adafruit_NeoPixel.h>
 #include <Adafruit_PCD8544.h>
-#include <RF24.h>
 
 class Device {
 private:
   Adafruit_PCD8544 display;
   Adafruit_NeoPixel led;
   Joystick joystick;
-  RF24 radio;
+  Radio radio;
 
   static void printHardwareInfo();
 
@@ -33,4 +31,5 @@ public:
 
   Adafruit_PCD8544 *getDisplay();
   Joystick *getJoystick();
+  Radio *getRadio();
 };

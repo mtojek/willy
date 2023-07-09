@@ -7,7 +7,7 @@ Device::Device()
           Adafruit_PCD8544(PCD8544_DC_PIN, PCD8544_CS_PIN, PCD8544_RST_PIN)),
       led(Adafruit_NeoPixel(1, LED_PIN, NEO_GRB + NEO_KHZ800)),
       joystick(Joystick(JOYSTICK_VRX_PIN, JOYSTICK_VRY_PIN, JOYSTICK_SW_PIN)),
-      radio(RF24(RADIO_CE_PIN, RADIO_CSN_PIN)) {}
+      radio(Radio(RADIO_CE_PIN, RADIO_CSN_PIN)) {}
 
 void Device::initialize() {
   Serial.begin(115200);
@@ -18,7 +18,12 @@ void Device::initialize() {
   printHardwareInfo();
 
   initializeDisplay();
-  // initializeRadio();
+
+  if (!radio.initialize()) {
+    ESP_LOGE(TAG, "Radio initialization failed");
+    return;
+  }
+
   boot();
 }
 
@@ -63,62 +68,6 @@ void Device::initializeDisplay() {
   display.display();
 }
 
-void Device::initializeRadio() {
-  if (!radio.begin()) {
-    ESP_LOGE(TAG, "Radio hardware is not responding.");
-    return;
-  }
-
-  uint8_t rxAddr[5] = "ardu";
-
-  radio.setPALevel(RF24_PA_HIGH);
-  radio.setChannel(5);
-  radio.setAutoAck(true);
-  radio.enableAckPayload();
-  radio.enableDynamicPayloads();
-  radio.openReadingPipe(0, rxAddr);
-  radio.startListening();
-  radio.setRetries(15, 15);
-  radio.printDetails();
-
-  byte payload[128];
-  memset(payload, 0, sizeof(payload));
-
-  uint8_t pipe;
-
-  while (true) {
-    if (radio.available(&pipe)) {
-      ESP_LOGI(TAG, "got it");
-      uint8_t bytes = radio.getPayloadSize(); // get the size of the payload
-
-      radio.read(&payload, bytes);
-
-      // fetch payload from FIFO
-      ESP_LOGI(TAG, "Received %d bytes on pipe %d", bytes, pipe);
-
-      int arrayLength = sizeof(payload) - 1;
-      for (int i = 0; i < arrayLength; i++) {
-        if (payload[i] == 0) {
-          break;
-        }
-
-        Serial.write(payload[i]);
-      }
-      Serial.println();
-
-      display.clearDisplay();
-      display.setCursor(2, 0);
-      display.print((char *)(payload));
-      display.display();
-
-      radio.writeAckPayload(1, payload, 6);
-      ESP_LOGI(TAG, "ACK");
-    }
-
-    delay(50);
-  }
-}
-
 void Device::boot() {
   display.fillScreen(1);
   display.display();
@@ -139,3 +88,5 @@ void Device::sync() { joystick.sync(); }
 Adafruit_PCD8544 *Device::getDisplay() { return &display; }
 
 Joystick *Device::getJoystick() { return &joystick; }
+
+Radio *Device::getRadio() { return &radio; }
