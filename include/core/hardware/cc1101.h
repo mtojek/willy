@@ -4,11 +4,11 @@
 
 #include "pinout.h"
 
-#include <ELECHOUSE_CC1101_SRC_DRV.h>
+#include <RadioLib.h>
 
-class CC1101 {
+class ModuleCC1101 {
 private:
-  int csnPin;
+  int csPin;
   int gdo0Pin;
   int gdo1Pin;
   int gdo2Pin;
@@ -16,12 +16,12 @@ private:
   int sckPin;
   int mosiPin;
 
-  ELECHOUSE_CC1101 elechouse;
+  CC1101 radio;
 
 public:
-  CC1101(int csnPin, int gdo0Pin, int gdo2Pin, int gdo1Pin = SPI_MISO_PIN,
-         int sckPin = SPI_SCK_PIN, int mosiPin = SPI_MOSI_PIN);
+  ModuleCC1101(int csPin, int gdo0Pin, int gdo2Pin, int gdo1Pin = SPI_MISO_PIN,
+               int sckPin = SPI_SCK_PIN, int mosiPin = SPI_MOSI_PIN);
 
   bool initialize();
-  ELECHOUSE_CC1101 *getDriver();
+  CC1101 *getDriver();
 };

@@ -2,26 +2,19 @@
 
 const char *CC1101_TAG = "cc1101";
 
-CC1101::CC1101(int csnPin, int gdo0Pin, int gdo2Pin, int gdo1Pin, int sckPin,
-               int mosiPin)
-    : csnPin(csnPin), gdo0Pin(gdo0Pin), gdo2Pin(gdo2Pin), gdo1Pin(gdo1Pin),
-      sckPin(sckPin), mosiPin(mosiPin), elechouse(ELECHOUSE_CC1101()) {}
+ModuleCC1101::ModuleCC1101(int csPin, int gdo0Pin, int gdo2Pin, int gdo1Pin,
+                           int sckPin, int mosiPin)
+    : csPin(csPin), gdo0Pin(gdo0Pin), gdo2Pin(gdo2Pin), gdo1Pin(gdo1Pin),
+      sckPin(sckPin), mosiPin(mosiPin),
+      radio(new Module(csPin, gdo0Pin, RADIOLIB_NC, gdo2Pin)) {}
 
-bool CC1101::initialize() {
-  elechouse.setSpiPin(sckPin, gdo1Pin, mosiPin, csnPin);
-  pinMode(csnPin, OUTPUT);
-
-  ESP_LOGD(CC1101_TAG, "Before elechouse.Init()");
-  elechouse.Init();
-  ESP_LOGD(CC1101_TAG, "After elechouse.Init()");
-
-  elechouse.setGDO(gdo0Pin, gdo2Pin);
-
-  if (!elechouse.getCC1101()) {
-    ESP_LOGE(CC1101_TAG, "CC1101 is not responding.");
+bool ModuleCC1101::initialize() {
+  int state = radio.begin();
+  if (state != RADIOLIB_ERR_NONE) {
+    ESP_LOGE(CC1101_TAG, "CC1101 is not responding: %d", state);
     return false;
   }
   return true;
 }
 
-ELECHOUSE_CC1101 *CC1101::getDriver() { return &elechouse; }
+CC1101 *ModuleCC1101::getDriver() { return &radio; }

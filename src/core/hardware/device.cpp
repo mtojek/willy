@@ -8,7 +8,7 @@ Device::Device()
       led(Adafruit_NeoPixel(1, LED_PIN, NEO_GRB + NEO_KHZ800)),
       joystick(Joystick(JOYSTICK_VRX_PIN, JOYSTICK_VRY_PIN, JOYSTICK_SW_PIN)),
       radio(Radio(RADIO_CE_PIN, RADIO_CSN_PIN)),
-      cc1101(CC1101(CC1101_CSN_PIN, CC1101_GDO0_PIN, CC1101_GDO2_PIN)) {}
+      cc1101(ModuleCC1101(CC1101_CSN_PIN, CC1101_GDO0_PIN, CC1101_GDO2_PIN)) {}
 
 void Device::initialize() {
   Serial.begin(115200);
@@ -18,6 +18,8 @@ void Device::initialize() {
   ESP_LOGI(TAG, "Willy is starting...");
   printHardwareInfo();
 
+  display.initialize();
+
   /*if (!radio.initialize()) {
     ESP_LOGE(TAG, "Radio initialization failed");
     return;
@@ -26,8 +28,6 @@ void Device::initialize() {
     ESP_LOGE(TAG, "CC1101 initialization failed");
     return;
   }
-
-  display.initialize();
 
   boot();
 
@@ -90,4 +90,4 @@ Joystick *Device::getJoystick() { return &joystick; }
 
 Radio *Device::getRadio() { return &radio; }
 
-CC1101 *Device::getCC1101() { return &cc1101; }
+ModuleCC1101 *Device::getCC1101() { return &cc1101; }
