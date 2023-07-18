@@ -10,6 +10,8 @@ Device::Device()
       radio(Radio(RADIO_CE_PIN, RADIO_CSN_PIN)),
       cc1101(ModuleCC1101(CC1101_CSN_PIN, CC1101_GDO0_PIN, CC1101_GDO2_PIN)) {}
 
+void handleInterrupt() { ESP_LOGI(TAG, "interrupt!!"); }
+
 void Device::initialize() {
   Serial.begin(115200);
   while (!Serial)
@@ -44,23 +46,16 @@ void Device::initialize() {
     return;
   }
 
-  // 1. setGDO0 i ccMode = 0
-  // 2. setGDO i setCCMode = 1 -> panic
-  // 3. setGDO i setCCMode = 0 -> no data
-  // 4. setGDO0 i ccMode = 0 -> good!
+  pinMode(CC1101_GDO2_PIN, INPUT);
+  int interruptPin = digitalPinToInterrupt(CC1101_GDO2_PIN);
 
   ELECHOUSE_cc1101.Init();
-  // ELECHOUSE_cc1101.setGDO(CC1101_GDO0_PIN, CC1101_GDO2_PIN);
-  ELECHOUSE_cc1101.setGDO0(CC1101_GDO0_PIN);
-  ELECHOUSE_cc1101.setCCMode(0);
-  ELECHOUSE_cc1101.setModulation(0);
-  ELECHOUSE_cc1101.setSyncMode(0);
-  ELECHOUSE_cc1101.setCrc(0);
-  ELECHOUSE_cc1101.setLengthConfig(1);
-  ELECHOUSE_cc1101.setManchester(true);
-  ELECHOUSE_cc1101.SetRx(freq);
+  ELECHOUSE_cc1101.setRxBW(58);
+  ELECHOUSE_cc1101.setMHZ(freq);
+  ELECHOUSE_cc1101.SetRx();
 
-  byte buffer[61] = {0};
+  attachInterrupt(interruptPin, handleInterrupt, CHANGE);
+
   while (true) {
     int rssi = ELECHOUSE_cc1101.getRssi();
     int lqi = ELECHOUSE_cc1101.getLqi();
@@ -68,24 +63,6 @@ void Device::initialize() {
     if (rssi > -40) {
       ESP_LOGI(TAG, "Freq: %f rssi=%d dBm lqi=%d", freq, rssi, lqi);
     }
-
-    if (ELECHOUSE_cc1101.CheckReceiveFlag()) {
-      ESP_LOGI(TAG, "Good!");
-
-      byte len = ELECHOUSE_cc1101.ReceiveData(buffer);
-      if (len > 0) {
-        ESP_LOGI(TAG, "Received: %d", len);
-      }
-
-      ELECHOUSE_cc1101.SetRx(freq);
-    }
-
-    /*freq = freq + jump;
-    if (freq > 436.99) {
-      freq = 433.0;
-    }*/
-
-    // ELECHOUSE_cc1101.setMHZ(freq);
   }
 
   /*CC1101 *r = cc1101.getDriver();
