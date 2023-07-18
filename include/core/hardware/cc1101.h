@@ -4,6 +4,9 @@
 
 #include "pinout.h"
 
+#define RADIOLIB_BUILD_ARDUINO
+#define RADIOLIB_DEBUG
+
 #include <RadioLib.h>
 
 class ModuleCC1101 {

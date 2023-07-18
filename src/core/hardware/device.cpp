@@ -18,20 +18,103 @@ void Device::initialize() {
   ESP_LOGI(TAG, "Willy is starting...");
   printHardwareInfo();
 
-  display.initialize();
-
   /*if (!radio.initialize()) {
     ESP_LOGE(TAG, "Radio initialization failed");
     return;
   }*/
-  if (!cc1101.initialize()) {
+  /*if (!cc1101.initialize()) {
     ESP_LOGE(TAG, "CC1101 initialization failed");
+    return;
+  }*/
+
+  // TODO Device initialize can fatal
+
+  ESP_LOGI(TAG, "Initialization done");
+
+  float freq = 433.92;
+  float jump = 0.1;
+
+  ELECHOUSE_cc1101.setSpiPin(SPI_SCK_PIN, SPI_MISO_PIN, SPI_MOSI_PIN,
+                             CC1101_CSN_PIN);
+
+  if (ELECHOUSE_cc1101.getCC1101()) { // Check the CC1101 Spi connection.
+    ESP_LOGI(TAG, "Good!");
+  } else {
+    ESP_LOGI(TAG, "Bad!");
     return;
   }
 
-  boot();
+  // 1. setGDO0 i ccMode = 0
+  // 2. setGDO i setCCMode = 1 -> panic
+  // 3. setGDO i setCCMode = 0 -> no data
+  // 4. setGDO0 i ccMode = 0 -> good!
 
-  ESP_LOGI(TAG, "Initialization done");
+  ELECHOUSE_cc1101.Init();
+  // ELECHOUSE_cc1101.setGDO(CC1101_GDO0_PIN, CC1101_GDO2_PIN);
+  ELECHOUSE_cc1101.setGDO0(CC1101_GDO0_PIN);
+  ELECHOUSE_cc1101.setCCMode(0);
+  ELECHOUSE_cc1101.setModulation(0);
+  ELECHOUSE_cc1101.setSyncMode(0);
+  ELECHOUSE_cc1101.setCrc(0);
+  ELECHOUSE_cc1101.setLengthConfig(1);
+  ELECHOUSE_cc1101.setManchester(true);
+  ELECHOUSE_cc1101.SetRx(freq);
+
+  byte buffer[61] = {0};
+  while (true) {
+    int rssi = ELECHOUSE_cc1101.getRssi();
+    int lqi = ELECHOUSE_cc1101.getLqi();
+
+    if (rssi > -40) {
+      ESP_LOGI(TAG, "Freq: %f rssi=%d dBm lqi=%d", freq, rssi, lqi);
+    }
+
+    if (ELECHOUSE_cc1101.CheckReceiveFlag()) {
+      ESP_LOGI(TAG, "Good!");
+
+      byte len = ELECHOUSE_cc1101.ReceiveData(buffer);
+      if (len > 0) {
+        ESP_LOGI(TAG, "Received: %d", len);
+      }
+
+      ELECHOUSE_cc1101.SetRx(freq);
+    }
+
+    /*freq = freq + jump;
+    if (freq > 436.99) {
+      freq = 433.0;
+    }*/
+
+    // ELECHOUSE_cc1101.setMHZ(freq);
+  }
+
+  /*CC1101 *r = cc1101.getDriver();
+
+
+  while (true) {
+    String str;
+    int state = r->receive(str);
+
+    if (r->getLQI() < 127) {
+      ESP_LOGI(TAG, "Freq: %f rssi=%f dBm lqi=%d", freq, r->getRSSI(),
+               r->getLQI());
+    }
+
+    if (state == RADIOLIB_ERR_NONE) {
+      ESP_LOGI(TAG, "None!!!!!!");
+    } else if (state == RADIOLIB_ERR_RX_TIMEOUT) {
+    } else if (state == RADIOLIB_ERR_CRC_MISMATCH) {
+    } else {
+      ESP_LOGI(TAG, "Unknown error: %d", state);
+    }
+
+    freq = freq + jump;
+    if (freq > 436.99) {
+      freq = 433.0;
+    }*/
+
+  // display.initialize();
+  // boot();
 }
 
 void Device::printHardwareInfo() {

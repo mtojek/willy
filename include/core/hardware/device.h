@@ -13,6 +13,8 @@
 #include <Adafruit_NeoPixel.h>
 #include <Adafruit_PCD8544.h>
 
+#include <ELECHOUSE_CC1101_SRC_DRV.h>
+
 class Device {
 private:
   Display display;
