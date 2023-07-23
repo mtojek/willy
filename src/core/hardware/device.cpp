@@ -10,9 +10,20 @@ Device::Device()
       radio(Radio(RADIO_CE_PIN, RADIO_CSN_PIN)),
       cc1101(ModuleCC1101(CC1101_CSN_PIN, CC1101_GDO0_PIN, CC1101_GDO2_PIN)) {}
 
-void handleInterrupt() { ESP_LOGI(TAG, "interrupt!!"); }
+volatile long last_micros;
+volatile long last_millis;
 
-void Device::initialize() {
+int timings[1024] = {0};
+int t = 0;
+
+void radioHandlerOnChange() {
+  int now = micros();
+  int delta_micros = now - last_micros;
+  timings[t++] = delta_micros;
+  last_micros = now;
+}
+
+bool Device::initialize() {
   Serial.begin(115200);
   while (!Serial)
     ;
@@ -22,73 +33,45 @@ void Device::initialize() {
 
   /*if (!radio.initialize()) {
     ESP_LOGE(TAG, "Radio initialization failed");
-    return;
+    return false;
   }*/
-  /*if (!cc1101.initialize()) {
+  if (!cc1101.initialize()) {
     ESP_LOGE(TAG, "CC1101 initialization failed");
-    return;
-  }*/
+    return false;
+  }
 
   // TODO Device initialize can fatal
 
   ESP_LOGI(TAG, "Initialization done");
 
-  float freq = 433.92;
-  float jump = 0.1;
+  CC1101 *radio = cc1101.getDriver();
+  radio->setMHZ(433.92);
+  radio->setTXPwr(TX_0_DBM);
+  radio->setRxBW(RX_BW_58_KHZ);
+  radio->setDataRate(10000);
+  radio->setModulation(ASK_OOK);
+  radio->setRx();
 
-  ELECHOUSE_cc1101.setSpiPin(SPI_SCK_PIN, SPI_MISO_PIN, SPI_MOSI_PIN,
-                             CC1101_CSN_PIN);
-
-  if (ELECHOUSE_cc1101.getCC1101()) { // Check the CC1101 Spi connection.
-    ESP_LOGI(TAG, "Good!");
-  } else {
-    ESP_LOGI(TAG, "Bad!");
-    return;
-  }
-
-  pinMode(CC1101_GDO2_PIN, INPUT);
   int interruptPin = digitalPinToInterrupt(CC1101_GDO2_PIN);
-
-  ELECHOUSE_cc1101.Init();
-  ELECHOUSE_cc1101.setRxBW(58);
-  ELECHOUSE_cc1101.setMHZ(freq);
-  ELECHOUSE_cc1101.SetRx();
-
-  attachInterrupt(interruptPin, handleInterrupt, CHANGE);
+  attachInterrupt(interruptPin, radioHandlerOnChange, CHANGE);
 
   while (true) {
-    int rssi = ELECHOUSE_cc1101.getRssi();
-    int lqi = ELECHOUSE_cc1101.getLqi();
+    if (millis() > (last_millis + 5000)) {
+      radio->setIdle();
 
-    if (rssi > -40) {
-      ESP_LOGI(TAG, "Freq: %f rssi=%d dBm lqi=%d", freq, rssi, lqi);
+      Serial.printf("Received: %d\n", t);
+      for (int i = 0; i < t; i++) {
+        Serial.print(timings[i]);
+        Serial.print(", ");
+      }
+      Serial.println();
+
+      t = 0;
+      radio->setRx();
+
+      last_millis = millis();
     }
   }
-
-  /*CC1101 *r = cc1101.getDriver();
-
-
-  while (true) {
-    String str;
-    int state = r->receive(str);
-
-    if (r->getLQI() < 127) {
-      ESP_LOGI(TAG, "Freq: %f rssi=%f dBm lqi=%d", freq, r->getRSSI(),
-               r->getLQI());
-    }
-
-    if (state == RADIOLIB_ERR_NONE) {
-      ESP_LOGI(TAG, "None!!!!!!");
-    } else if (state == RADIOLIB_ERR_RX_TIMEOUT) {
-    } else if (state == RADIOLIB_ERR_CRC_MISMATCH) {
-    } else {
-      ESP_LOGI(TAG, "Unknown error: %d", state);
-    }
-
-    freq = freq + jump;
-    if (freq > 436.99) {
-      freq = 433.0;
-    }*/
 
   // display.initialize();
   // boot();

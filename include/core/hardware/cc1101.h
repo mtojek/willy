@@ -4,10 +4,7 @@
 
 #include "pinout.h"
 
-#define RADIOLIB_BUILD_ARDUINO
-#define RADIOLIB_DEBUG
-
-#include <RadioLib.h>
+#include <CC1101_ESP_Arduino.h>
 
 class ModuleCC1101 {
 private:

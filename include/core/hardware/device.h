@@ -13,8 +13,6 @@
 #include <Adafruit_NeoPixel.h>
 #include <Adafruit_PCD8544.h>
 
-#include <ELECHOUSE_CC1101_SRC_DRV.h>
-
 class Device {
 private:
   Display display;
@@ -28,7 +26,7 @@ private:
 
 public:
   Device();
-  void initialize();
+  bool initialize();
   void sync();
 
   Display *getDisplay();
