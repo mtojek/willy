@@ -1,0 +1,28 @@
+  CC1101 *radio = transceiver433.getDriver();
+  radio->setMHZ(433.92);
+  radio->setTXPwr(TX_0_DBM);
+  radio->setRxBW(RX_BW_58_KHZ);
+  radio->setDataRate(10000);
+  radio->setModulation(ASK_OOK);
+  radio->setRx();
+
+  int interruptPin = digitalPinToInterrupt(CC1101_GDO2_PIN);
+  attachInterrupt(interruptPin, radioHandlerOnChange, CHANGE);
+
+  while (true) {
+    if (millis() > (last_millis + 5000)) {
+      radio->setIdle();
+
+      Serial.printf("Received: %d\n", t);
+      for (int i = 0; i < t; i++) {
+        Serial.print(timings[i]);
+        Serial.print(", ");
+      }
+      Serial.println();
+
+      t = 0;
+      radio->setRx();
+
+      last_millis = millis();
+    }
+  }

@@ -1,0 +1,8 @@
+  if (!transceiver24.initialize()) {
+    ESP_LOGE(TAG, "Initialization of transceiver 2.4Ghz failed");
+    return false;
+  }
+  if (!transceiver433.initialize()) {
+    ESP_LOGE(TAG, "Initialization of transceiver 433Mhz failed");
+    return false;
+  }

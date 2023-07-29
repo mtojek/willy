@@ -32,50 +32,8 @@ bool Device::initialize() {
   ESP_LOGI(TAG, "Willy is starting...");
   printHardwareInfo();
 
-  /*if (!transceiver24.initialize()) {
-    ESP_LOGE(TAG, "Transceiver 2.4Ghz initialization failed");
-    return false;
-  }*/
-  if (!transceiver433.initialize()) {
-    ESP_LOGE(TAG, "Transceiver 433Mhz initialization failed");
-    return false;
-  }
-
-  // TODO Device initialize can fatal
-
-  ESP_LOGI(TAG, "Initialization done");
-
-  CC1101 *radio = transceiver433.getDriver();
-  radio->setMHZ(433.92);
-  radio->setTXPwr(TX_0_DBM);
-  radio->setRxBW(RX_BW_58_KHZ);
-  radio->setDataRate(10000);
-  radio->setModulation(ASK_OOK);
-  radio->setRx();
-
-  int interruptPin = digitalPinToInterrupt(CC1101_GDO2_PIN);
-  attachInterrupt(interruptPin, radioHandlerOnChange, CHANGE);
-
-  while (true) {
-    if (millis() > (last_millis + 5000)) {
-      radio->setIdle();
-
-      Serial.printf("Received: %d\n", t);
-      for (int i = 0; i < t; i++) {
-        Serial.print(timings[i]);
-        Serial.print(", ");
-      }
-      Serial.println();
-
-      t = 0;
-      radio->setRx();
-
-      last_millis = millis();
-    }
-  }
-
-  // display.initialize();
-  // boot();
+  display.initialize();
+  boot();
 }
 
 void Device::printHardwareInfo() {

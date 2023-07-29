@@ -5,7 +5,7 @@
 #include "apps/homescreen.h"
 #include "apps/mainmenu.h"
 
-#define TAG "device"
+#define TAG "main"
 
 Device willy;
 ApplicationManager appManager;
@@ -18,6 +18,7 @@ void setup() {
     ESP_LOGE(TAG, "Willy initialization failed");
     exit(0);
   }
+  ESP_LOGI(TAG, "Initialization done");
 
   appManager.install(homeScreen);
   appManager.install(mainMenu);
