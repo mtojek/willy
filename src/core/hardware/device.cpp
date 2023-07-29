@@ -7,8 +7,9 @@ Device::Device()
                       PCD8544_CONTRAST, PCD8544_BIAS)),
       led(Adafruit_NeoPixel(1, LED_PIN, NEO_GRB + NEO_KHZ800)),
       joystick(Joystick(JOYSTICK_VRX_PIN, JOYSTICK_VRY_PIN, JOYSTICK_SW_PIN)),
-      radio(Radio(RADIO_CE_PIN, RADIO_CSN_PIN)),
-      cc1101(ModuleCC1101(CC1101_CSN_PIN, CC1101_GDO0_PIN, CC1101_GDO2_PIN)) {}
+      transceiver24(Transceiver24(RADIO_CE_PIN, RADIO_CSN_PIN)),
+      transceiver433(
+          Transceiver433(CC1101_CSN_PIN, CC1101_GDO0_PIN, CC1101_GDO2_PIN)) {}
 
 volatile long last_micros;
 volatile long last_millis;
@@ -31,12 +32,12 @@ bool Device::initialize() {
   ESP_LOGI(TAG, "Willy is starting...");
   printHardwareInfo();
 
-  /*if (!radio.initialize()) {
-    ESP_LOGE(TAG, "Radio initialization failed");
+  /*if (!transceiver24.initialize()) {
+    ESP_LOGE(TAG, "Transceiver 2.4Ghz initialization failed");
     return false;
   }*/
-  if (!cc1101.initialize()) {
-    ESP_LOGE(TAG, "CC1101 initialization failed");
+  if (!transceiver433.initialize()) {
+    ESP_LOGE(TAG, "Transceiver 433Mhz initialization failed");
     return false;
   }
 
@@ -44,7 +45,7 @@ bool Device::initialize() {
 
   ESP_LOGI(TAG, "Initialization done");
 
-  CC1101 *radio = cc1101.getDriver();
+  CC1101 *radio = transceiver433.getDriver();
   radio->setMHZ(433.92);
   radio->setTXPwr(TX_0_DBM);
   radio->setRxBW(RX_BW_58_KHZ);
@@ -131,6 +132,6 @@ Display *Device::getDisplay() { return &display; }
 
 Joystick *Device::getJoystick() { return &joystick; }
 
-Radio *Device::getRadio() { return &radio; }
+Transceiver24 *Device::getTransceiver24() { return &transceiver24; }
 
-ModuleCC1101 *Device::getCC1101() { return &cc1101; }
+Transceiver433 *Device::getTransceiver433() { return &transceiver433; }

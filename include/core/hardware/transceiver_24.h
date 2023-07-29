@@ -4,12 +4,12 @@
 
 #include <RF24.h>
 
-class Radio {
+class Transceiver24 {
 private:
   RF24 rf;
 
 public:
-  Radio(int cePin, int csnPin);
+  Transceiver24(int cePin, int csnPin);
 
   bool initialize();
   RF24 *getDriver();

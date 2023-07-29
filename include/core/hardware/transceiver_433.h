@@ -6,7 +6,7 @@
 
 #include <CC1101_ESP_Arduino.h>
 
-class ModuleCC1101 {
+class Transceiver433 {
 private:
   int csPin;
   int gdo0Pin;
@@ -19,8 +19,9 @@ private:
   CC1101 radio;
 
 public:
-  ModuleCC1101(int csPin, int gdo0Pin, int gdo2Pin, int gdo1Pin = SPI_MISO_PIN,
-               int sckPin = SPI_SCK_PIN, int mosiPin = SPI_MOSI_PIN);
+  Transceiver433(int csPin, int gdo0Pin, int gdo2Pin,
+                 int gdo1Pin = SPI_MISO_PIN, int sckPin = SPI_SCK_PIN,
+                 int mosiPin = SPI_MOSI_PIN);
 
   bool initialize();
   CC1101 *getDriver();
