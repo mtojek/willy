@@ -1,4 +1,3 @@
 * Re-arrange pins to order modules
 * New module: irda (transmitter, receiver)
 * New module: buzzer
-* New Module: mifare port
