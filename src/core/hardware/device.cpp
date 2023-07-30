@@ -6,7 +6,8 @@ Device::Device()
     : display(Display(PCD8544_DC_PIN, PCD8544_CS_PIN, PCD8544_RST_PIN,
                       PCD8544_CONTRAST, PCD8544_BIAS)),
       led(Adafruit_NeoPixel(1, LED_PIN, NEO_GRB + NEO_KHZ800)),
-      joystick(Joystick(JOYSTICK_VRX_PIN, JOYSTICK_VRY_PIN, JOYSTICK_SW_PIN)),
+      joystick(
+          Joystick(JOYSTICK1_VRX_PIN, JOYSTICK1_VRY_PIN, JOYSTICK1_SW_PIN)),
       transceiver24(
           Transceiver24(TRANSCEIVER_24_CE_PIN, TRANSCEIVER_24_CSN_PIN)),
       transceiver433(Transceiver433(TRANSCEIVER_433_CSN_PIN,
