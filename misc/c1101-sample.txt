@@ -6,7 +6,7 @@
   radio->setModulation(ASK_OOK);
   radio->setRx();
 
-  int interruptPin = digitalPinToInterrupt(CC1101_GDO2_PIN);
+  int interruptPin = digitalPinToInterrupt(TRANSCEIVER_433_GDO2_PIN);
   attachInterrupt(interruptPin, radioHandlerOnChange, CHANGE);
 
   while (true) {
