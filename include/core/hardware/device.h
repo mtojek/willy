@@ -5,6 +5,7 @@
 
 #include "pinout.h"
 
+#include "buzzer.h"
 #include "display.h"
 #include "joystick.h"
 #include "transceiver_24.h"
@@ -20,6 +21,7 @@ private:
   Joystick joystick;
   Transceiver24 transceiver24;
   Transceiver433 transceiver433;
+  Buzzer buzzer;
 
   static void printHardwareInfo();
   void boot();
@@ -33,4 +35,5 @@ public:
   Joystick *getJoystick();
   Transceiver24 *getTransceiver24();
   Transceiver433 *getTransceiver433();
+  Buzzer *getBuzzer();
 };

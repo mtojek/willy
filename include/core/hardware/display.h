@@ -11,6 +11,6 @@ private:
 public:
   Display(int dcPin, int csPin, int rstPin, int contrast, int bias);
 
-  void initialize();
+  bool initialize();
   Adafruit_PCD8544 *getDriver();
 };

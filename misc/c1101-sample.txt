@@ -26,3 +26,18 @@
       last_millis = millis();
     }
   }
+
+
+
+volatile long last_micros;
+volatile long last_millis;
+
+int timings[1024] = {0};
+int t = 0;
+
+void radioHandlerOnChange() {
+  int now = micros();
+  int delta_micros = now - last_micros;
+  timings[t++] = delta_micros;
+  last_micros = now;
+}

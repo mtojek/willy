@@ -2,6 +2,15 @@
 
 #define TAG "device"
 
+int melody[] = {NOTE_E5, NOTE_E5, NOTE_E5, NOTE_E5, NOTE_E5, NOTE_E5, NOTE_E5,
+                NOTE_G5, NOTE_C5, NOTE_D5, NOTE_E5, NOTE_F5, NOTE_F5, NOTE_F5,
+                NOTE_F5, NOTE_F5, NOTE_E5, NOTE_E5, NOTE_E5, NOTE_E5, NOTE_E5,
+                NOTE_D5, NOTE_D5, NOTE_E5, NOTE_D5, NOTE_G5};
+
+// note durations: 4 = quarter note, 8 = eighth note, etc, also called tempo:
+int noteDurations[] = {8, 8, 4, 8, 8, 4,  8,  8, 8, 8, 2, 8, 8,
+                       8, 8, 8, 8, 8, 16, 16, 8, 8, 8, 8, 4, 4};
+
 Device::Device()
     : display(Display(PCD8544_DC_PIN, PCD8544_CS_PIN, PCD8544_RST_PIN,
                       PCD8544_CONTRAST, PCD8544_BIAS)),
@@ -12,20 +21,8 @@ Device::Device()
           Transceiver24(TRANSCEIVER_24_CE_PIN, TRANSCEIVER_24_CSN_PIN)),
       transceiver433(Transceiver433(TRANSCEIVER_433_CSN_PIN,
                                     TRANSCEIVER_433_GDO0_PIN,
-                                    TRANSCEIVER_433_GDO2_PIN)) {}
-
-volatile long last_micros;
-volatile long last_millis;
-
-int timings[1024] = {0};
-int t = 0;
-
-void radioHandlerOnChange() {
-  int now = micros();
-  int delta_micros = now - last_micros;
-  timings[t++] = delta_micros;
-  last_micros = now;
-}
+                                    TRANSCEIVER_433_GDO2_PIN)),
+      buzzer(Buzzer(BUZZER_PIN)) {}
 
 bool Device::initialize() {
   Serial.begin(115200);
@@ -35,8 +32,17 @@ bool Device::initialize() {
   ESP_LOGI(TAG, "Willy is starting...");
   printHardwareInfo();
 
-  display.initialize();
+  if (!display.initialize()) {
+    return false;
+  }
+
   boot();
+
+  ezBuzzer *b = buzzer.getDriver();
+
+  int length = sizeof(noteDurations) / sizeof(int);
+  b->playMelody(melody, noteDurations, length);
+  return true;
 }
 
 void Device::printHardwareInfo() {
@@ -87,7 +93,10 @@ void Device::boot() {
   d->display();
 }
 
-void Device::sync() { joystick.sync(); }
+void Device::sync() {
+  joystick.sync();
+  buzzer.sync();
+}
 
 Display *Device::getDisplay() { return &display; }
 
@@ -96,3 +105,5 @@ Joystick *Device::getJoystick() { return &joystick; }
 Transceiver24 *Device::getTransceiver24() { return &transceiver24; }
 
 Transceiver433 *Device::getTransceiver433() { return &transceiver433; }
+
+Buzzer *Device::getBuzzer() { return &buzzer; }
