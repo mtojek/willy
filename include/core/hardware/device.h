@@ -8,6 +8,7 @@
 #include "buzzer.h"
 #include "display.h"
 #include "joystick.h"
+#include "sdcard.h"
 #include "transceiver_24.h"
 #include "transceiver_433.h"
 
@@ -22,6 +23,7 @@ private:
   Transceiver24 transceiver24;
   Transceiver433 transceiver433;
   Buzzer buzzer;
+  SDCard sdCard;
 
   static void printHardwareInfo();
   void boot();
@@ -36,4 +38,5 @@ public:
   Transceiver24 *getTransceiver24();
   Transceiver433 *getTransceiver433();
   Buzzer *getBuzzer();
+  SDCard *getSDCard();
 };

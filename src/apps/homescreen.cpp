@@ -36,6 +36,27 @@ void HomeScreen::onRender() {
 
   Display *display = device.getDisplay();
   Adafruit_PCD8544 *d = display->getDriver();
+
+  int i = 0;
+  File root = SD.open("/");
+  while (true) {
+    File entry = root.openNextFile();
+    if (!entry) {
+      // no more files
+      break;
+    }
+
+    ESP_LOGD(name, "/%s", entry.name(), entry);
+
+    d->setCursor(0, i * 8);
+    d->print("/");
+    d->print(entry.name());
+    d->display();
+
+    entry.close();
+    i++;
+  }
+
   d->setCursor(30, 40);
   d->print("Menu");
   d->display();

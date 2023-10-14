@@ -2,14 +2,12 @@
 
 #define TAG "device"
 
-int melody[] = {NOTE_E5, NOTE_E5, NOTE_E5, NOTE_E5, NOTE_E5, NOTE_E5, NOTE_E5,
-                NOTE_G5, NOTE_C5, NOTE_D5, NOTE_E5, NOTE_F5, NOTE_F5, NOTE_F5,
-                NOTE_F5, NOTE_F5, NOTE_E5, NOTE_E5, NOTE_E5, NOTE_E5, NOTE_E5,
-                NOTE_D5, NOTE_D5, NOTE_E5, NOTE_D5, NOTE_G5};
+int melody[] = {NOTE_E5,  NOTE_D5, NOTE_FS4, NOTE_GS4, NOTE_CS5,
+                NOTE_B4,  NOTE_D4, NOTE_E4,  NOTE_B4,  NOTE_A4,
+                NOTE_CS4, NOTE_E4, NOTE_A4};
 
 // note durations: 4 = quarter note, 8 = eighth note, etc, also called tempo:
-int noteDurations[] = {8, 8, 4, 8, 8, 4,  8,  8, 8, 8, 2, 8, 8,
-                       8, 8, 8, 8, 8, 16, 16, 8, 8, 8, 8, 4, 4};
+int noteDurations[] = {8, 8, 4, 4, 8, 8, 4, 4, 8, 8, 4, 4, 2};
 
 Device::Device()
     : display(Display(PCD8544_DC_PIN, PCD8544_CS_PIN, PCD8544_RST_PIN,
@@ -22,7 +20,7 @@ Device::Device()
       transceiver433(Transceiver433(TRANSCEIVER_433_CSN_PIN,
                                     TRANSCEIVER_433_GDO0_PIN,
                                     TRANSCEIVER_433_GDO2_PIN)),
-      buzzer(Buzzer(BUZZER_PIN)) {}
+      buzzer(Buzzer(BUZZER_PIN)), sdCard(SDCard(46)) {}
 
 bool Device::initialize() {
   Serial.begin(115200);
@@ -31,6 +29,10 @@ bool Device::initialize() {
 
   ESP_LOGI(TAG, "Willy is starting...");
   printHardwareInfo();
+
+  if (!sdCard.initialize()) {
+    return false;
+  }
 
   if (!display.initialize()) {
     return false;
@@ -107,3 +109,5 @@ Transceiver24 *Device::getTransceiver24() { return &transceiver24; }
 Transceiver433 *Device::getTransceiver433() { return &transceiver433; }
 
 Buzzer *Device::getBuzzer() { return &buzzer; }
+
+SDCard *Device::getSDCard() { return &sdCard; }
