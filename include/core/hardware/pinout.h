@@ -36,3 +36,4 @@
 #define BUZZER_PIN 45
 
 #define IRDA_RECEIVER_PIN 3
+#define IRDA_SENDER_PIN 8

@@ -21,7 +21,7 @@ Device::Device()
                                     TRANSCEIVER_433_GDO0_PIN,
                                     TRANSCEIVER_433_GDO2_PIN)),
       buzzer(Buzzer(BUZZER_PIN)), sdCard(SDCard(46)),
-      irDA(IrDA(IRDA_RECEIVER_PIN)) {}
+      irDA(IrDA(IRDA_RECEIVER_PIN, IRDA_SENDER_PIN)) {}
 
 bool Device::initialize() {
   Serial.begin(115200);
@@ -39,7 +39,7 @@ bool Device::initialize() {
 
   boot();
 
-  decode_results results;
+  /*decode_results results;
 
   while (true) {
     if (irDA.getReceiverDriver()->decode(&results)) {
@@ -48,6 +48,20 @@ bool Device::initialize() {
       }
       irDA.getReceiverDriver()->resume();
     }
+  }*/
+
+  ESP_LOGI(TAG, "On"), irDA.getSenderDriver()->sendNEC(0xFFB04F);
+  delay(3000);
+
+  while (true) {
+    ESP_LOGI(TAG, "Red!"), irDA.getSenderDriver()->sendNEC(0xFFE817);
+    delay(1000);
+
+    ESP_LOGI(TAG, "Green!"), irDA.getSenderDriver()->sendNEC(0xFF48B7);
+    delay(1000);
+
+    ESP_LOGI(TAG, "Blue!"), irDA.getSenderDriver()->sendNEC(0xFF6897);
+    delay(1000);
   }
 
   return true;
