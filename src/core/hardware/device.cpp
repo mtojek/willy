@@ -39,7 +39,7 @@ bool Device::initialize() {
 
   boot();
 
-  /*decode_results results;
+  decode_results results;
 
   while (true) {
     if (irDA.getReceiverDriver()->decode(&results)) {
@@ -48,9 +48,9 @@ bool Device::initialize() {
       }
       irDA.getReceiverDriver()->resume();
     }
-  }*/
+  }
 
-  ESP_LOGI(TAG, "On"), irDA.getSenderDriver()->sendNEC(0xFFB04F);
+  /*ESP_LOGI(TAG, "On"), irDA.getSenderDriver()->sendNEC(0xFFB04F);
   delay(3000);
 
   while (true) {
@@ -62,7 +62,7 @@ bool Device::initialize() {
 
     ESP_LOGI(TAG, "Blue!"), irDA.getSenderDriver()->sendNEC(0xFF6897);
     delay(1000);
-  }
+  }*/
 
   return true;
 }
