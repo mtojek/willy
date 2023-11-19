@@ -7,6 +7,7 @@
 
 #include "buzzer.h"
 #include "display.h"
+#include "irda.h"
 #include "joystick.h"
 #include "sdcard.h"
 #include "transceiver_24.h"
@@ -14,6 +15,9 @@
 
 #include <Adafruit_NeoPixel.h>
 #include <Adafruit_PCD8544.h>
+
+#include <IRtext.h>
+#include <IRutils.h>
 
 class Device {
 private:
@@ -24,6 +28,7 @@ private:
   Transceiver433 transceiver433;
   Buzzer buzzer;
   SDCard sdCard;
+  IrDA irDA;
 
   static void printHardwareInfo();
   void boot();
@@ -39,4 +44,5 @@ public:
   Transceiver433 *getTransceiver433();
   Buzzer *getBuzzer();
   SDCard *getSDCard();
+  IrDA *getIrDA();
 };

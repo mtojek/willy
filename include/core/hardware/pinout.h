@@ -34,3 +34,5 @@
 #define TRANSCEIVER_433_GDO2_PIN 17           // IRQ
 
 #define BUZZER_PIN 45
+
+#define IRDA_RECEIVER_PIN 3

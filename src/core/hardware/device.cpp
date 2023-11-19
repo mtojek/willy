@@ -20,7 +20,8 @@ Device::Device()
       transceiver433(Transceiver433(TRANSCEIVER_433_CSN_PIN,
                                     TRANSCEIVER_433_GDO0_PIN,
                                     TRANSCEIVER_433_GDO2_PIN)),
-      buzzer(Buzzer(BUZZER_PIN)), sdCard(SDCard(46)) {}
+      buzzer(Buzzer(BUZZER_PIN)), sdCard(SDCard(46)),
+      irDA(IrDA(IRDA_RECEIVER_PIN)) {}
 
 bool Device::initialize() {
   Serial.begin(115200);
@@ -30,20 +31,25 @@ bool Device::initialize() {
   ESP_LOGI(TAG, "Willy is starting...");
   printHardwareInfo();
 
-  if (!sdCard.initialize()) {
-    return false;
-  }
-
   if (!display.initialize()) {
     return false;
   }
 
+  irDA.initialize();
+
   boot();
 
-  ezBuzzer *b = buzzer.getDriver();
+  decode_results results;
 
-  int length = sizeof(noteDurations) / sizeof(int);
-  b->playMelody(melody, noteDurations, length);
+  while (true) {
+    if (irDA.getReceiverDriver()->decode(&results)) {
+      if (results.bits > 0) {
+        ESP_LOGI(TAG, "IrDA: %s", resultToHumanReadableBasic(&results).c_str());
+      }
+      irDA.getReceiverDriver()->resume();
+    }
+  }
+
   return true;
 }
 
@@ -111,3 +117,5 @@ Transceiver433 *Device::getTransceiver433() { return &transceiver433; }
 Buzzer *Device::getBuzzer() { return &buzzer; }
 
 SDCard *Device::getSDCard() { return &sdCard; }
+
+IrDA *Device::getIrDA() { return &irDA; }
